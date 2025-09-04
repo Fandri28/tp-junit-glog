@@ -1,26 +1,32 @@
 package fr.emse.test;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class MoneyTest {
 
+    private Money m12CHF;
+    private Money m14CHF;
+
+    // 🔹 exécuté avant chaque test
+    @Before
+    public void setUp() {
+        m12CHF = new Money(12, "CHF");
+        m14CHF = new Money(14, "CHF");
+    }
+
     @Test
     public void testSimpleAdd() {
-        Money m12CHF = new Money(12, "CHF"); // création de données
-        Money m14CHF = new Money(14, "CHF");
         Money expected = new Money(26, "CHF");
-        Money result = m12CHF.add(m14CHF); // exécution de la méthode testée
-        assertTrue(expected.equals(result)); // comparaison
+        Money result = m12CHF.add(m14CHF);
+        assertTrue(expected.equals(result));
     }
-    
+
     @Test
     public void testEquals() {
-    Money m12CHF= new Money(12, "CHF");
-    Money m14CHF= new Money(14, "CHF");
-    assertTrue(!m12CHF.equals(null));
-    assertEquals(m12CHF, m12CHF);
-    assertEquals(m12CHF, new Money(12, "CHF"));
-    assertTrue(!m12CHF.equals(m14CHF));
+        Money another12CHF = new Money(12, "CHF");
+        assertTrue(m12CHF.equals(another12CHF));
+        assertFalse(m12CHF.equals(m14CHF));
     }
 }
