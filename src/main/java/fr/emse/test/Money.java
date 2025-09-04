@@ -2,7 +2,7 @@ package fr.emse.test;
 
 import java.util.Objects;
 
-class Money {
+class Money implements IMoney {
     private int fAmount;
     private String fCurrency;
 
@@ -19,20 +19,38 @@ class Money {
         return fCurrency;
     }
 
-    public Money add(Money m) {
-        if (!currency().equals(m.currency())) {
-            throw new IllegalArgumentException("Devises différentes !");
+    
+    @Override
+    public IMoney add(IMoney aMoney) {
+        if (aMoney instanceof Money) {
+            Money m = (Money) aMoney;
+            if (m.currency().equals(currency())) {
+                return new Money(amount() + m.amount(), currency());
+            } else {
+                return new MoneyBag(this, m);
+            }
+        } else if (aMoney instanceof MoneyBag) {
+            return aMoney.add(this); 
+        } else {
+            throw new IllegalArgumentException("Type inconnu");
         }
-        return new Money(amount() + m.amount(), currency());
     }
-  
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true; // même référence
+        if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Money money = (Money) obj;
         return fAmount == money.fAmount && fCurrency.equals(money.fCurrency);
     }
 
-    
+    @Override
+    public int hashCode() {
+        return Objects.hash(fAmount, fCurrency);
+    }
+
+    @Override
+    public String toString() {
+        return fAmount + " " + fCurrency;
+    }
 }

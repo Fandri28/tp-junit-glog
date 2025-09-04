@@ -1,35 +1,51 @@
 package fr.emse.test;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class MoneyBagTest {
 
-    private Money f12CHF;
-    private Money f14CHF;
-    private Money f7USD;
-    private Money f21USD;
-    private MoneyBag fMB1;
-    private MoneyBag fMB2;
+    private Money m12CHF;
+    private Money m14CHF;
+    private Money m7USD;
+    private Money m21USD;
+
+    private MoneyBag mb1; // {12CHF, 7USD}
+    private MoneyBag mb2; // {14CHF, 21USD}
 
     @Before
     public void setUp() {
-        f12CHF = new Money(12, "CHF");
-        f14CHF = new Money(14, "CHF");
-        f7USD  = new Money(7, "USD");
-        f21USD = new Money(21, "USD");
+        m12CHF = new Money(12, "CHF");
+        m14CHF = new Money(14, "CHF");
+        m7USD  = new Money(7, "USD");
+        m21USD = new Money(21, "USD");
 
-        fMB1 = new MoneyBag(f12CHF, f7USD);
-        fMB2 = new MoneyBag(f14CHF, f21USD);
+        mb1 = new MoneyBag(m12CHF, m7USD);
+        mb2 = new MoneyBag(m14CHF, m21USD);
     }
 
     @Test
-    public void testBagEquals() {
-        assertTrue(!fMB1.equals(null));          
-        assertEquals(fMB1, fMB1);                
-        assertTrue(!fMB1.equals(f12CHF));       
-        assertTrue(!f12CHF.equals(fMB1));       
-        assertTrue(!fMB1.equals(fMB2));         
+    public void testBagSimpleAdd() {
+        // Money + MoneyBag
+        MoneyBag expected = new MoneyBag(new Money[]{ m12CHF, m14CHF, m21USD });
+        IMoney result = m12CHF.add(mb2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testSimpleBagAdd() {
+        // MoneyBag + Money
+        MoneyBag expected = new MoneyBag(new Money[]{ m12CHF, m7USD, m14CHF });
+        IMoney result = mb1.add(m14CHF);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testBagBagAdd() {
+        // MoneyBag + MoneyBag
+        MoneyBag expected = new MoneyBag(new Money[]{ m12CHF, m14CHF, m7USD, m21USD });
+        IMoney result = mb1.add(mb2);
+        assertEquals(expected, result);
     }
 }
