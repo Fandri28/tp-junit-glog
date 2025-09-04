@@ -2,7 +2,7 @@ package fr.emse.test;
 
 import java.util.Vector;
 
-class MoneyBag implements IMoney {
+public class MoneyBag implements IMoney {
     private Vector<Money> fMonies = new Vector<>();
 
     public MoneyBag(Money m1, Money m2) {
@@ -11,9 +11,7 @@ class MoneyBag implements IMoney {
     }
 
     public MoneyBag(Money[] bag) {
-        for (Money m : bag) {
-            appendMoney(m);
-        }
+        for (Money m : bag) appendMoney(m);
     }
 
     private void appendMoney(Money m) {
@@ -29,16 +27,18 @@ class MoneyBag implements IMoney {
 
     @Override
     public IMoney add(IMoney aMoney) {
-        if (aMoney instanceof Money) {
-            appendMoney((Money) aMoney);
-        } else if (aMoney instanceof MoneyBag) {
-            MoneyBag other = (MoneyBag) aMoney;
-            for (Money m : other.fMonies) {
-                appendMoney(m);
-            }
-        } else {
-            throw new IllegalArgumentException("Type inconnu");
-        }
+        return aMoney.addMoneyBag(this);
+    }
+
+    @Override
+    public IMoney addMoney(Money m) { // doit correspondre à IMoney
+        appendMoney(m);
+        return this;
+    }
+
+    @Override
+    public IMoney addMoneyBag(MoneyBag mb) { // doit correspondre à IMoney
+        for (Money m : mb.fMonies) appendMoney(m);
         return this;
     }
 

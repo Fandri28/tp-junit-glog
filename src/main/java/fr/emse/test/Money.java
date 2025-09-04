@@ -19,21 +19,26 @@ class Money implements IMoney {
         return fCurrency;
     }
 
+
+    @Override
+    public IMoney add(IMoney m) {
+        return m.addMoney(this);  
+    }
+
     
     @Override
-    public IMoney add(IMoney aMoney) {
-        if (aMoney instanceof Money) {
-            Money m = (Money) aMoney;
-            if (m.currency().equals(currency())) {
-                return new Money(amount() + m.amount(), currency());
-            } else {
-                return new MoneyBag(this, m);
-            }
-        } else if (aMoney instanceof MoneyBag) {
-            return aMoney.add(this); 
+    public IMoney addMoney(Money m) {
+        if (m.currency().equals(currency())) {
+            return new Money(amount() + m.amount(), currency());
         } else {
-            throw new IllegalArgumentException("Type inconnu");
+            return new MoneyBag(m, this);
         }
+    }
+
+
+    @Override
+    public IMoney addMoneyBag(MoneyBag mb) {
+        return mb.add(this);  // délégation à MoneyBag
     }
 
     @Override
