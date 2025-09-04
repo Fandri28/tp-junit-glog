@@ -9,7 +9,7 @@ public class MoneyTest {
     private Money m12CHF;
     private Money m14CHF;
 
-    // 🔹 exécuté avant chaque test
+    //exécuté avant chaque test
     @Before
     public void setUp() {
         m12CHF = new Money(12, "CHF");
