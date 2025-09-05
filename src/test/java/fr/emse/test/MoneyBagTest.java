@@ -25,27 +25,45 @@ public class MoneyBagTest {
         mb2 = new MoneyBag(m14CHF, m21USD);
     }
 
+
     @Test
     public void testBagSimpleAdd() {
-        // Money + MoneyBag
-        MoneyBag expected = new MoneyBag(new Money[]{ m12CHF, m14CHF, m21USD });
-        IMoney result = m12CHF.add(mb2);
+        // {[12 CHF][7 USD]} + [14 CHF] == {[26 CHF][7 USD]}
+        Money m14CHF = new Money(14, "CHF");
+        Money[] bag = { new Money(26, "CHF"), new Money(7, "USD") };
+        MoneyBag expected = new MoneyBag(bag);
+
+        IMoney result = (new MoneyBag(new Money[]{ m12CHF, new Money(7, "USD") })).add(m14CHF);
+
         assertEquals(expected, result);
     }
 
     @Test
     public void testSimpleBagAdd() {
-        // MoneyBag + Money
-        MoneyBag expected = new MoneyBag(new Money[]{ m12CHF, m7USD, m14CHF });
-        IMoney result = mb1.add(m14CHF);
+        // [14 CHF] + {[12 CHF][7 USD]} == {[26 CHF][7 USD]}
+        Money m14CHF = new Money(14, "CHF");
+        Money[] bag = { new Money(26, "CHF"), new Money(7, "USD") };
+        MoneyBag expected = new MoneyBag(bag);
+
+        IMoney result = m14CHF.add(new MoneyBag(new Money[]{ m12CHF, new Money(7, "USD") }));
+
         assertEquals(expected, result);
     }
 
     @Test
     public void testBagBagAdd() {
-        // MoneyBag + MoneyBag
-        MoneyBag expected = new MoneyBag(new Money[]{ m12CHF, m14CHF, m7USD, m21USD });
+        // {[12 CHF][7 USD]} + {[14 CHF][21 USD]} == {[26 CHF][28 USD]}
+        Money[] bag1 = { m12CHF, new Money(7, "USD") };
+        Money[] bag2 = { new Money(14, "CHF"), new Money(21, "USD") };
+        MoneyBag mb1 = new MoneyBag(bag1);
+        MoneyBag mb2 = new MoneyBag(bag2);
+
+        Money[] expectedBag = { new Money(26, "CHF"), new Money(28, "USD") };
+        MoneyBag expected = new MoneyBag(expectedBag);
+
         IMoney result = mb1.add(mb2);
+
         assertEquals(expected, result);
     }
+
 }

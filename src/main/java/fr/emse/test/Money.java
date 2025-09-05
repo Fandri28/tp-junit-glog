@@ -2,7 +2,7 @@ package fr.emse.test;
 
 import java.util.Objects;
 
-class Money implements IMoney {
+public class Money implements IMoney {
     private int fAmount;
     private String fCurrency;
 
@@ -19,26 +19,26 @@ class Money implements IMoney {
         return fCurrency;
     }
 
-
     @Override
     public IMoney add(IMoney m) {
-        return m.addMoney(this);  
+        return m.addMoney(this);
     }
 
-    
     @Override
     public IMoney addMoney(Money m) {
         if (m.currency().equals(currency())) {
             return new Money(amount() + m.amount(), currency());
         } else {
-            return new MoneyBag(m, this);
+            return new MoneyBag(new Money[]{this, m});
         }
     }
 
-
     @Override
     public IMoney addMoneyBag(MoneyBag mb) {
-        return mb.add(this);  // délégation à MoneyBag
+        // Création d'un nouveau MoneyBag avec les valeurs du MoneyBag existant + ce Money
+        MoneyBag result = new MoneyBag(mb.getMonies());
+        result.appendMoney(this);
+        return result;
     }
 
     @Override

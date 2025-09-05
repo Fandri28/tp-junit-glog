@@ -10,7 +10,7 @@ public class MoneyTest {
     private Money m14CHF;
 
     
-    //exécuté avant chaque test
+ 
     @Before
     public void setUp() {
         m12CHF = new Money(12, "CHF");
@@ -33,9 +33,11 @@ public class MoneyTest {
     
     @Test
     public void testMixedSimpleAdd() {
-        Money m7USD = null;
-		Money[] bag = { m12CHF, m7USD };
+        Money m7USD = new Money(7, "USD");
+        Money[] bag = { m12CHF, m7USD };
         MoneyBag expected = new MoneyBag(bag);
-        assertEquals(expected, m12CHF.add(m7USD));  // addition Money + Money retourne MoneyBag
+        IMoney result = m12CHF.add(m7USD);
+        assertEquals(expected, result);   
     }
+
 }

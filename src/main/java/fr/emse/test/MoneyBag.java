@@ -14,7 +14,7 @@ public class MoneyBag implements IMoney {
         for (Money m : bag) appendMoney(m);
     }
 
-    private void appendMoney(Money m) {
+    void appendMoney(Money m) {
         for (int i = 0; i < fMonies.size(); i++) {
             Money existing = fMonies.get(i);
             if (existing.currency().equals(m.currency())) {
@@ -31,24 +31,44 @@ public class MoneyBag implements IMoney {
     }
 
     @Override
-    public IMoney addMoney(Money m) { // doit correspondre à IMoney
-        appendMoney(m);
-        return this;
+    public IMoney addMoney(Money m) {
+        MoneyBag result = new MoneyBag(fMonies.toArray(new Money[0])); // copie
+        result.appendMoney(m);
+        return result;
     }
 
     @Override
-    public IMoney addMoneyBag(MoneyBag mb) { // doit correspondre à IMoney
-        for (Money m : mb.fMonies) appendMoney(m);
-        return this;
+    public IMoney addMoneyBag(MoneyBag mb) {
+        MoneyBag result = new MoneyBag(fMonies.toArray(new Money[0])); // copie
+        for (Money m : mb.getMonies()) result.appendMoney(m);
+        return result;
     }
+
+
+    public Money[] getMonies() {
+        return fMonies.toArray(new Money[0]);
+    }
+
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         MoneyBag other = (MoneyBag) obj;
-        return fMonies.equals(other.fMonies);
+        if (fMonies.size() != other.fMonies.size()) return false;
+        for (Money m : fMonies) {
+            boolean found = false;
+            for (Money o : other.fMonies) {
+                if (m.equals(o)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+        return true;
     }
+
 
     @Override
     public int hashCode() {
@@ -59,4 +79,7 @@ public class MoneyBag implements IMoney {
     public String toString() {
         return fMonies.toString();
     }
+    
+    
+    
 }
