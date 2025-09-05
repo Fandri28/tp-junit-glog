@@ -35,11 +35,14 @@ public class Money implements IMoney {
 
     @Override
     public IMoney addMoneyBag(MoneyBag mb) {
-        // Création d'un nouveau MoneyBag avec les valeurs du MoneyBag existant + ce Money
+        // Crée une copie du MoneyBag existant
         MoneyBag result = new MoneyBag(mb.getMonies());
+        // Ajoute ce Money au bag
         result.appendMoney(this);
-        return result;
+        // Appelle simplify() pour transformer le MoneyBag en Money si possible
+        return result.simplify();
     }
+
 
     @Override
     public boolean equals(Object obj) {

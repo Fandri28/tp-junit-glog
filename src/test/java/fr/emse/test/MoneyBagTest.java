@@ -46,7 +46,6 @@ public class MoneyBagTest {
         MoneyBag expected = new MoneyBag(bag);
 
         IMoney result = m14CHF.add(new MoneyBag(new Money[]{ m12CHF, new Money(7, "USD") }));
-
         assertEquals(expected, result);
     }
 
@@ -65,5 +64,20 @@ public class MoneyBagTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    public void testSimplifySingleMoney() {
+       
+        MoneyBag bag = new MoneyBag(new Money[]{ m12CHF, m7USD });
+        Money negative12CHF = new Money(-12, "CHF");
+
+
+        IMoney result = bag.add(negative12CHF);
+
+        // Vérifie que le résultat est simplifié en Money
+        Money expected = m7USD;
+        assertEquals(expected, result);
+    }
+
 
 }
